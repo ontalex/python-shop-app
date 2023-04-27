@@ -27,3 +27,8 @@ def parseRow(row):
         goodRow.append(str(row[i]))
 
     return goodRow
+
+def clean_form_frame(self, frame):
+    # отчистка переданого фрайма от виджетов
+    for widget in frame.winfo_children():
+        widget.destroy()

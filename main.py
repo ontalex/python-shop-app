@@ -8,7 +8,7 @@ from lib import *
 
 
 # Connect to the database
-conn = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Z:\Developments\Python\shop_max\shop\shop1.accdb')
+conn = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Z:\Developments\Python\shop_max\shop_v2\python-shop-app\shop1.accdb')
 cursor = conn.cursor()
 
 
