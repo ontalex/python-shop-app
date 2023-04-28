@@ -231,7 +231,7 @@ class App(tk.Tk):
             self.destroy_form()
 
 
-    def sales_table(self, create_form = False, edit_form = False, delete_from = False):
+    def sales_table(self, create_form = False, edit_form = False, delete_form = False):
         print("sales_table")
 
         self.table_title = "Продано"
@@ -257,14 +257,14 @@ class App(tk.Tk):
         elif (edit_form == True):
             print(">>> Open Edit Form")
             self.update_form_open(columns=columns)
-        elif (delete_from == True):
+        elif (delete_form == True):
             print(">>> Open Delete Form")
             self.delete_form_open(columns=columns)
         else:
             self.destroy_form()
 
 
-    def suppliers_table(self, create_form = False, edit_form = False, delete_from = False):
+    def suppliers_table(self, create_form = False, edit_form = False, delete_form = False):
         print("suppliers_table")
 
         self.table_title = "Поставщики"
@@ -290,14 +290,14 @@ class App(tk.Tk):
         elif (edit_form == True):
             print(">>> Open Edit Form")
             self.update_form_open(columns=columns)
-        elif (delete_from == True):
+        elif (delete_form == True):
             print(">>> Open Delete Form")
             self.delete_form_open(columns=columns)
         else:
             self.destroy_form()
 
 
-    def supply_table(self, create_form = False, edit_form = False, delete_from = False):
+    def supply_table(self, create_form = False, edit_form = False, delete_form = False):
         print("supply_table")
 
         self.table_title = "Поставки"
@@ -323,7 +323,7 @@ class App(tk.Tk):
         elif (edit_form == True):
             print(">>> Open Edit Form")
             self.update_form_open(columns=columns)
-        elif (delete_from == True):
+        elif (delete_form == True):
             print(">>> Open Delete Form")
             self.delete_form_open(columns=columns)
         else:
@@ -492,7 +492,6 @@ class App(tk.Tk):
 
     def delete_form_open(self, columns):
         print(">>> Open Delete Form")
-
 
         self.destroy_form()
 
