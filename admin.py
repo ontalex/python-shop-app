@@ -189,6 +189,12 @@ class App(tk.Tk):
 
         self.update_table()
 
+    def delete_row(self, columns, id):
+        sql = f"DELETE FROM [{self.table_title}] WHERE [{columns[0]}]='{id}'"
+        print("SQL STRING = ", sql)
+        self.cursor.execute(sql)
+        self.conn.commit()
+        self.update_table()
 
 
     # ============== инициаторы таблиц ==============
@@ -220,7 +226,7 @@ class App(tk.Tk):
             self.update_form_open(columns=columns)
         elif (delete_form == True):
             print(">>> Open Delete Form (from prod_table)")
-            self.delete_form_open()
+            self.delete_form_open(columns=columns)
         else:
             self.destroy_form()
 
@@ -484,11 +490,9 @@ class App(tk.Tk):
 
         self.update_table()
 
-    def delete_form_open(self):
+    def delete_form_open(self, columns):
         print(">>> Open Delete Form")
 
-        def delete_data():
-            print(">>> Start Function Delete Data")
 
         self.destroy_form()
 
@@ -497,7 +501,7 @@ class App(tk.Tk):
         self.delete_elem_entry = Entry(self.form_frame, width=92, font="arial 16")
 
         # кнопка удаления
-        self.delete_elem_btn = Button(self.form_frame, text="Удалить", width=10, background="red", foreground="white", command=delete_data, font="arial 12")
+        self.delete_elem_btn = Button(self.form_frame, text="Удалить", width=10, background="red", foreground="white", command=lambda: self.delete_row(columns, self.delete_elem_entry.get()), font="arial 12")
 
         # инициализация виджетов на удаление
         self.delete_elem_entry.grid(
