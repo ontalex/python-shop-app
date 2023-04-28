@@ -188,6 +188,7 @@ class App(tk.Tk):
             self.cursor.execute(sql)
 
         self.update_table()
+        self.update_form_open(columns)
 
     def delete_row(self, columns, id):
         sql = f"DELETE FROM [{self.table_title}] WHERE [{columns[0]}]='{id}'"
@@ -473,7 +474,7 @@ class App(tk.Tk):
         self.destroy_form()
 
         # Создать поле поиска данных
-        self.update_find_entry = Entry(self.form_frame, width=80, font="arial 16")
+        self.update_find_entry = Entry(self.form_frame, width=94, font="arial 16")
 
         # Создать кнопку
         self.update_find_btn = Button(self.form_frame, text="Найдти", width=10, background="blue", foreground="white", command=has_data, font="arial 12")
