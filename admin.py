@@ -179,12 +179,15 @@ class App(tk.Tk):
         
         # сормирование запроса
         for i in range(0, len(values)):
-            sql = "UPDATE {} SET {} WHERE {}".format(self.table_title, "=".join([columns[i+1], self.entries[i].get()]), "=".join([columns[0], id_find]))
+            # решить проблемму с синтаксисом запроса (использовать другую контетенацию строк)
+            # sql = "UPDATE " + self.table_title + " SET ['" + columns[i+1] + "']='" + values[i] + "' WHERE ['" + columns[0] + "']='" + id_find + "'"
+            # sql = "UPDATE {} SET {} WHERE {}".format(self.table_title, "=".join([columns[i+1], self.entries[i].get()]), "=".join([columns[0], id_find]))
+            sql = f"UPDATE {self.table_title} SET [{columns[i+1]}]='{values[i]}' WHERE [{columns[0]}]='{id_find}'"
+
             print(">>> UPDATE SQL STRING = ", sql)
             self.cursor.execute(sql)
 
         self.update_table()
-
 
 
 
@@ -255,8 +258,6 @@ class App(tk.Tk):
             self.destroy_form()
 
 
-
-
     def suppliers_table(self, create_form = False, edit_form = False, delete_from = False):
         print("suppliers_table")
 
@@ -290,8 +291,6 @@ class App(tk.Tk):
             self.destroy_form()
 
 
-
-
     def supply_table(self, create_form = False, edit_form = False, delete_from = False):
         print("supply_table")
 
@@ -323,8 +322,6 @@ class App(tk.Tk):
             self.delete_form_open(columns=columns)
         else:
             self.destroy_form()
-
-
 
 
     def check_table(self):
