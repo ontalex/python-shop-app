@@ -192,7 +192,7 @@ class App(tk.Tk):
 
 
     # ============== инициаторы таблиц ==============
-    def products_table(self, create_form = False, edit_form = False, delete_from = False):
+    def products_table(self, create_form = False, edit_form = False, delete_form = False):
         
         print("products_table")
         self.table_title = "Товары"
@@ -218,9 +218,9 @@ class App(tk.Tk):
         elif (edit_form == True):
             print(">>> Open Edit Form")
             self.update_form_open(columns=columns)
-        elif (delete_from == True):
-            print(">>> Open Delete Form")
-            self.delete_form_open(columns=columns)
+        elif (delete_form == True):
+            print(">>> Open Delete Form (from prod_table)")
+            self.delete_form_open()
         else:
             self.destroy_form()
 
@@ -464,12 +464,10 @@ class App(tk.Tk):
             else:
                 print(">> RES is null")
 
-
-
         self.destroy_form()
 
         # Создать поле поиска данных
-        self.update_find_entry = Entry(self.form_frame, width=40, font="arial 16",)
+        self.update_find_entry = Entry(self.form_frame, width=80, font="arial 16")
 
         # Создать кнопку
         self.update_find_btn = Button(self.form_frame, text="Найдти", width=10, background="blue", foreground="white", command=has_data, font="arial 12")
@@ -485,6 +483,32 @@ class App(tk.Tk):
         )
 
         self.update_table()
+
+    def delete_form_open(self):
+        print(">>> Open Delete Form")
+
+        def delete_data():
+            print(">>> Start Function Delete Data")
+
+        self.destroy_form()
+
+        # создаём обёртки
+        # поле ввода
+        self.delete_elem_entry = Entry(self.form_frame, width=92, font="arial 16")
+
+        # кнопка удаления
+        self.delete_elem_btn = Button(self.form_frame, text="Удалить", width=10, background="red", foreground="white", command=delete_data, font="arial 12")
+
+        # инициализация виджетов на удаление
+        self.delete_elem_entry.grid(
+            row=0,
+            column=0,
+            padx=5
+        )
+        self.delete_elem_btn.grid(
+            row=0,
+            column=1
+        )
 
     def destroy_form(self):
         print(">>> Destroy form")
