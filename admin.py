@@ -169,6 +169,18 @@ class App(tk.Tk):
         self.conn.commit()
         self.update_table()
 
+    def update_row(self, columns, id_find):
+        
+        # забор данных из полей ввода
+        values = []
+        for i in range(1, len(self.entries)-1):
+            values.append("'{}'='{}'".format(columns[i], self.entries[i].get()))
+            self.entries[i].delete(0, tk.END) # очистить поле ввода после добавления записи
+
+        # сормирование запроса
+        sql = "UPDATE {} SET {} WHERE {};".format(self.table_title, ", ".join(values), "'{}'='{}'".format(columns[0], id_find))
+        print(">>> UPDATE SQL STRING = ", sql)
+
 
 
 
@@ -386,28 +398,58 @@ class App(tk.Tk):
 
     def update_form_open(self, columns):
         
-        def update_form_data():
+        def update_form_data(id):
             ## Инициировать форму обновления данных
             print(">>> Update Form - Open")
 
             # self.form_frame.destroy()
             self.destroy_form()
-            self.form_frame = Frame(borderwidth=1, relief=tk.SOLID, width=1000, height=100)
-
-            # форма для работы с данными
-
-            # кнопка обновления введённых данных
             
-            # кнопка сброса ввода
+            # создание обёрток
+            # обёртка для групп полей ввода-пометок пользователя
+            self.form_params = Frame(self.form_frame, background="#898176")
+            self.form_params.pack(expand=True)
+            # обёртка для групп полей ввода-пометок пользователя
+            self.form_buttons = Frame(self.form_frame, background="orange")
+            self.form_buttons.pack(expand=True)
 
+            # ****************** создать поля ввода (с пометками) ******************
+            for entry in self.entries:
+                entry.destroy()
+
+            for label in self.labels:
+                label.destroy()
+            
+            self.entries = []
+            self.labels = []
+
+            for i in range(0, len(columns)):
+                label = ttk.Label(self.form_params, text=columns[i])
+                entry = ttk.Entry(self.form_params)
+
+                self.entries.append(entry)
+                self.labels.append(label)
+
+                entry.grid(column=i, row=1, pady=1, padx=4)
+                label.grid(column=i, row=0, pady=1, padx=4)
+
+            # создать кнопку отправки
+            self.create_button = Button(self.form_buttons, text="Обновить", width=20, background="green", foreground="white", command=lambda: self.update_row(columns, id))
+            self.create_button.grid(row=0, column=0, padx=5)
+
+            # создать кнопку сброса данных
+            self.reset_button = Button(self.form_buttons, text="Сброс", width=20, background="red", foreground="white", command=self.reset_form)
+            self.reset_button.grid(row=0, column=1, padx=5)
 
         def has_data():
             print("Check has data for Update Data")
 
             # выполнить запрос на поиск данных
             # если есть, то update_form_data, иначе сообщение об ошибки
+            
+            find_id = self.update_find_entry.get()
 
-            sql = "SELECT * FROM {} WHERE {}='{}'".format(self.table_title, columns[0], self.update_find_entry.get())
+            sql = "SELECT * FROM {} WHERE {}='{}'".format(self.table_title, columns[0], find_id)
             print(">>> SQL STRING = ",sql)
 
             self.cursor.execute(sql)
@@ -415,7 +457,7 @@ class App(tk.Tk):
             print(result)
 
             if result != []:
-                update_form_data()
+                update_form_data(find_id)
             else:
                 print(">> RES is null")
 
@@ -429,8 +471,15 @@ class App(tk.Tk):
         # Создать кнопку
         self.update_find_btn = Button(self.form_frame, text="Найдти", width=10, background="blue", foreground="white", command=has_data, font="arial 12")
 
-        self.update_find_entry.place(x=180, y=64)
-        self.update_find_btn.place(x=64, y=64)
+        self.update_find_entry.grid(
+            row=0,
+            column=1,
+            padx=5
+        )
+        self.update_find_btn.grid(
+            row=0,
+            column=0
+        )
 
     def destroy_form(self):
         print(">>> Destroy form")
