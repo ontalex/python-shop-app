@@ -40,16 +40,16 @@ class App(tk.Tk):
 
         # создание контейнера для формы
         self.form_frame = Frame(self.app_box)
-        self.form_frame.pack(fill=BOTH, expand=True, padx=8, pady=8)
+        self.form_frame.pack(fill=BOTH, expand=True, padx=16, pady=16)
 
         # пометка для пользователя в контейнере форм
         self.label_alert = Label(self.form_frame, text="Здесь будет форма данных. \nВыберите таблицу из меню", foreground="red", font="8")
-        self.label_alert.pack(fill=BOTH, expand=True)
+        self.label_alert.pack(fill=BOTH, expand=1)
 
         # создание контейнера для таблицы
-        self.table = ttk.Treeview(self.app_box, height=20)
+        self.table = ttk.Treeview(self.app_box)
         self.table["columns"] = ()
-        self.table.pack(fill=BOTH, expand=True, padx=8, pady=8)
+        self.table.pack(fill=BOTH, expand=True, padx=16, pady=16)
 
         # глобальные переменные
         self.table_title = ""
@@ -138,23 +138,26 @@ class App(tk.Tk):
     
     def create_table(self, columns):
         # self.table.destroy()
-        self.table.delete()
+        # self.table.delete()
+        print("заголовки (1) = ",self.table.winfo_children())
         
         # self.form_frame.destroy() # заменить на обход объекта
         print(self.form_frame.winfo_children())
         for widget in self.form_frame.winfo_children():
             widget.destroy()
         
-        self.table=ttk.Treeview(self) # increase font size
+        # self.table=ttk.Treeview(self.app_box) # increase font size
         self.table.bind("<>")
         self.table["columns"] = columns
 
-        self.table.column('#0', width=0, stretch=tk.NO)
+        self.table.column('#0', width=0, stretch=tk.YES)
         self.table.heading('#0', text="", anchor=tk.CENTER)
 
         for column in columns:
-            self.table.column(column, width=150, anchor=tk.CENTER)
+            self.table.column(column, stretch=tk.YES, anchor=tk.CENTER)
             self.table.heading(column, text=column, anchor=tk.CENTER)
+
+        print("заголовки (2) = ",self.table.winfo_children())
 
     def create_row(self):
         values = []
@@ -335,13 +338,22 @@ class App(tk.Tk):
 
     def create_form_open(self, columns):
 
-        # self.form_frame.destroy()
         self.destroy_form()
-        self.form_frame = Frame(borderwidth=1, relief=tk.SOLID, width=1000, height=100)
 
-        self.create_button = Button(self.form_frame, text="Создать", width=20, background="green", foreground="white", command=self.create_row)
-        # self.create_button.place( x=64, y=110 )
-        self.create_button.pack()
+        # создание обёрток
+        # обёртка для групп полей ввода-пометок пользователя
+        self.form_params = Frame(self.form_frame, background="#898176")
+        self.form_params.pack(expand=True)
+        # обёртка для групп полей ввода-пометок пользователя
+        self.form_buttons = Frame(self.form_frame, background="orange")
+        self.form_buttons.pack(expand=True)
+
+
+        self.create_button = Button(self.form_buttons, text="Создать", width=20, background="green", foreground="white", command=self.create_row)
+        self.create_button.grid(row=0, column=0, padx=5)
+
+        self.reset_button = Button(self.form_buttons, text="Сброс", width=20, background="red", foreground="white", command=self.reset_form)
+        self.reset_button.grid(row=0, column=1, padx=5)
         
 
         ########################################################################################
@@ -356,21 +368,16 @@ class App(tk.Tk):
         self.labels = []
 
         for i in range(0, len(columns)):
-            entry = ttk.Entry(self)
-            label = ttk.Label(self, text=columns[i])
+            label = ttk.Label(self.form_params, text=columns[i])
+            entry = ttk.Entry(self.form_params)
 
             self.entries.append(entry)
             self.labels.append(label)
 
-            entry.place(x = 64 + 150 * i, y=80)
-            label.place(x = 64 + 150 * i, y = 60)
+            entry.grid(column=i, row=1, pady=1, padx=4)
+            label.grid(column=i, row=0, pady=1, padx=4)
 
         ########################################################################################
-
-        if len(self.entries) > 0:
-            self.reset_button = Button(self.form_frame, text="Сброс", width=10, background="red", foreground="white", command=self.reset_form)
-            self.reset_button.place(x=230,y=110)
-            # self.reset_button.place( anchor=E )
 
     def update_form_open(self, columns):
         
