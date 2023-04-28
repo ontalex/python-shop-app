@@ -35,7 +35,7 @@ class App(tk.Tk):
         self.rule_label.pack(side="top", fill="x")
 
         # создание основного контейнера приложения
-        self.app_box = Frame(self, background="yellow")
+        self.app_box = Frame(self,)
         self.app_box.pack(fill=BOTH, expand=True)
 
         # создание контейнера для формы
@@ -366,10 +366,10 @@ class App(tk.Tk):
 
         # создание обёрток
         # обёртка для групп полей ввода-пометок пользователя
-        self.form_params = Frame(self.form_frame, background="#898176")
+        self.form_params = Frame(self.form_frame)
         self.form_params.pack(expand=True)
         # обёртка для групп полей ввода-пометок пользователя
-        self.form_buttons = Frame(self.form_frame, background="orange")
+        self.form_buttons = Frame(self.form_frame)
         self.form_buttons.pack(expand=True)
 
 
@@ -416,10 +416,10 @@ class App(tk.Tk):
             
             # создание обёрток
             # обёртка для групп полей ввода-пометок пользователя
-            self.form_params = Frame(self.form_frame, background="#898176")
+            self.form_params = Frame(self.form_frame)
             self.form_params.pack(expand=True)
             # обёртка для групп полей ввода-пометок пользователя
-            self.form_buttons = Frame(self.form_frame, background="orange")
+            self.form_buttons = Frame(self.form_frame)
             self.form_buttons.pack(expand=True)
 
             # ****************** создать поля ввода (с пометками) ******************
