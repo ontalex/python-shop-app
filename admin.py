@@ -173,13 +173,17 @@ class App(tk.Tk):
         
         # забор данных из полей ввода
         values = []
-        for i in range(1, len(self.entries)-1):
-            values.append("'{}'='{}'".format(columns[i], self.entries[i].get()))
+        for i in range(0, len(self.entries)):
+            values.append(self.entries[i].get())
             self.entries[i].delete(0, tk.END) # очистить поле ввода после добавления записи
-
+        
         # сормирование запроса
-        sql = "UPDATE {} SET {} WHERE {};".format(self.table_title, ", ".join(values), "'{}'='{}'".format(columns[0], id_find))
-        print(">>> UPDATE SQL STRING = ", sql)
+        for i in range(0, len(values)):
+            sql = "UPDATE {} SET {} WHERE {}".format(self.table_title, "=".join([columns[i+1], self.entries[i].get()]), "=".join([columns[0], id_find]))
+            print(">>> UPDATE SQL STRING = ", sql)
+            self.cursor.execute(sql)
+
+        self.update_table()
 
 
 
@@ -200,9 +204,9 @@ class App(tk.Tk):
         self.cursor.execute(sql)
         result = self.cursor.fetchall()
 
-        # заполнение таблицы
-        for row in result:
-            self.table.insert(parent='', index='end', values=tuple(row))
+        # # заполнение таблицы
+        # for row in result:
+        #     self.table.insert(parent='', index='end', values=tuple(row))
 
         # запуск формы для обработки таблицы
         if (create_form == True):
@@ -396,8 +400,10 @@ class App(tk.Tk):
 
         ########################################################################################
 
+        self.update_table()
+
     def update_form_open(self, columns):
-        
+
         def update_form_data(id):
             ## Инициировать форму обновления данных
             print(">>> Update Form - Open")
@@ -423,7 +429,7 @@ class App(tk.Tk):
             self.entries = []
             self.labels = []
 
-            for i in range(0, len(columns)):
+            for i in range(1, len(columns)):
                 label = ttk.Label(self.form_params, text=columns[i])
                 entry = ttk.Entry(self.form_params)
 
@@ -480,6 +486,8 @@ class App(tk.Tk):
             row=0,
             column=0
         )
+
+        self.update_table()
 
     def destroy_form(self):
         print(">>> Destroy form")
