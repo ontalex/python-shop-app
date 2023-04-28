@@ -180,6 +180,7 @@ class App(tk.Tk):
 
         # создание колон таблицы
         columns = ('Код', 'Наименование', 'Id_поставки', 'Количество', 'Срок_годности', 'Цена', 'Скидка')
+        self.update_table()
         self.create_table(columns=columns)
 
         # запрос к базе на поучение текущих данных
@@ -208,10 +209,11 @@ class App(tk.Tk):
     def sales_table(self, create_form = False, edit_form = False, delete_from = False):
         print("sales_table")
 
-        self.table_title = "Товары"
+        self.table_title = "Продано"
 
         # создание колон таблицы
-        columns = ('Код', 'Наименование', 'Id_поставки', 'Количество', 'Срок_годности', 'Цена', 'Скидка')
+        columns = ('Порядковый_номер', 'Штрих-код', "Количество", "Номер_чека", "Цена")
+        self.update_table()
         self.create_table(columns=columns)
 
         # запрос к базе на поучение текущих данных
@@ -242,10 +244,11 @@ class App(tk.Tk):
     def suppliers_table(self, create_form = False, edit_form = False, delete_from = False):
         print("suppliers_table")
 
-        self.table_title = "Товары"
+        self.table_title = "Поставщики"
 
         # создание колон таблицы
-        columns = ('Код', 'Наименование', 'Id_поставки', 'Количество', 'Срок_годности', 'Цена', 'Скидка')
+        columns = ("id_поставщика", "Наименование", "Телефон", "Адрес", "Почта")
+        self.update_table()
         self.create_table(columns=columns)
 
         # запрос к базе на поучение текущих данных
@@ -276,10 +279,11 @@ class App(tk.Tk):
     def supply_table(self, create_form = False, edit_form = False, delete_from = False):
         print("supply_table")
 
-        self.table_title = "Товары"
+        self.table_title = "Поставки"
 
         # создание колон таблицы
-        columns = ('Код', 'Наименование', 'Id_поставки', 'Количество', 'Срок_годности', 'Цена', 'Скидка')
+        columns = ('Номер_накладной', 'id_поставщика', "дата")
+        self.update_table()
         self.create_table(columns=columns)
 
         # запрос к базе на поучение текущих данных
@@ -310,10 +314,11 @@ class App(tk.Tk):
     def check_table(self):
         print("check_table")
 
-        self.table_title = "Товары"
+        self.table_title = "Чек"
 
         # создание колон таблицы
-        columns = ('Код', 'Наименование', 'Id_поставки', 'Количество', 'Срок_годности', 'Цена', 'Скидка')
+        columns = ("Номер_чека", "Дата", "Время", "Номер_кассира")
+        self.update_table()
         self.create_table(columns=columns)
 
         # запрос к базе на поучение текущих данных
@@ -385,7 +390,8 @@ class App(tk.Tk):
             ## Инициировать форму обновления данных
             print(">>> Update Form - Open")
 
-            self.form_frame.destroy()
+            # self.form_frame.destroy()
+            self.destroy_form()
             self.form_frame = Frame(borderwidth=1, relief=tk.SOLID, width=1000, height=100)
 
             # форма для работы с данными
