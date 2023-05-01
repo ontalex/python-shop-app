@@ -107,20 +107,6 @@ class App(tk.Tk):
     
 
     # =============== Оброботчики таблиц ====================
-    def render_table(self):
-        table = self.table_title
-
-        if table == "Товары":
-            self.products_table()
-        elif table == "Продано":
-            self.sales_table()
-        elif table == "Поставщики":
-            self.suppliers_table()
-        elif table == "Поставки":
-            self.supply_table()
-        elif table == "Чек":
-            self.check_table()
-
     def update_table(self):
         # Очистить таблицу перед обновлением
         records = self.table.get_children()
@@ -191,11 +177,22 @@ class App(tk.Tk):
         self.update_form_open(columns)
 
     def delete_row(self, columns, id):
-        sql = f"DELETE FROM [{self.table_title}] WHERE [{columns[0]}]='{id}'"
-        print("SQL STRING = ", sql)
+        sql = f"SELECT * FROM [{self.table_title}] WHERE [{columns[0]}]='{id}'"
         self.cursor.execute(sql)
-        self.conn.commit()
-        self.update_table()
+        row_alert = self.cursor.fetchall()
+
+        res = messagebox.askquestion(title="подтверждение удаления", message=f"Вы хотите удалить данные?\nСтрока: {row_alert[0]}")
+
+        if res == "yes":
+            sql = f"DELETE FROM [{self.table_title}] WHERE [{columns[0]}]='{id}'"
+            print("SQL STRING = ", sql)
+            self.cursor.execute(sql)
+            self.conn.commit()
+            self.update_table()
+
+            self.delete_elem_entry.delete(0, END)
+        else:
+            self.delete_elem_entry.delete(0, END)
 
 
     # ============== инициаторы таблиц ==============
@@ -209,14 +206,7 @@ class App(tk.Tk):
         self.update_table()
         self.create_table(columns=columns)
 
-        # запрос к базе на поучение текущих данных
-        sql = "SELECT * FROM {}".format(self.table_title)
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
-
-        # # заполнение таблицы
-        # for row in result:
-        #     self.table.insert(parent='', index='end', values=tuple(row))
+        self.update_table()
 
         # запуск формы для обработки таблицы
         if (create_form == True):
@@ -242,14 +232,7 @@ class App(tk.Tk):
         self.update_table()
         self.create_table(columns=columns)
 
-        # запрос к базе на поучение текущих данных
-        sql = "SELECT * FROM {}".format(self.table_title)
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
-
-        # заполнение таблицы
-        for row in result:
-            self.table.insert(parent='', index='end', values=tuple(row))
+        self.update_table()
 
         # запуск формы для обработки таблицы
         if (create_form == True):
@@ -275,14 +258,16 @@ class App(tk.Tk):
         self.update_table()
         self.create_table(columns=columns)
 
-        # запрос к базе на поучение текущих данных
-        sql = "SELECT * FROM {}".format(self.table_title)
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
+        self.update_table()
 
-        # заполнение таблицы
-        for row in result:
-            self.table.insert(parent='', index='end', values=tuple(row))
+        # # запрос к базе на поучение текущих данных
+        # sql = "SELECT * FROM {}".format(self.table_title)
+        # self.cursor.execute(sql)
+        # result = self.cursor.fetchall()
+
+        # # заполнение таблицы
+        # for row in result:
+        #     self.table.insert(parent='', index='end', values=tuple(row))
 
         # запуск формы для обработки таблицы
         if (create_form == True):
@@ -308,14 +293,16 @@ class App(tk.Tk):
         self.update_table()
         self.create_table(columns=columns)
 
-        # запрос к базе на поучение текущих данных
-        sql = "SELECT * FROM {}".format(self.table_title)
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
+        self.update_table()
 
-        # заполнение таблицы
-        for row in result:
-            self.table.insert(parent='', index='end', values=tuple(row))
+        # # запрос к базе на поучение текущих данных
+        # sql = "SELECT * FROM {}".format(self.table_title)
+        # self.cursor.execute(sql)
+        # result = self.cursor.fetchall()
+
+        # # заполнение таблицы
+        # for row in result:
+        #     self.table.insert(parent='', index='end', values=tuple(row))
 
         # запуск формы для обработки таблицы
         if (create_form == True):
@@ -341,16 +328,7 @@ class App(tk.Tk):
         self.update_table()
         self.create_table(columns=columns)
 
-        # запрос к базе на поучение текущих данных
-        sql = "SELECT * FROM {}".format(self.table_title)
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
-
-        print(result)
-
-        # заполнение таблицы
-        for row in result:
-            self.table.insert(parent='', index='end', values=tuple(row))
+        self.update_table()
 
         self.destroy_form()
 
@@ -393,8 +371,8 @@ class App(tk.Tk):
         self.labels = []
 
         for i in range(0, len(columns)):
-            label = ttk.Label(self.form_params, text=columns[i])
-            entry = ttk.Entry(self.form_params)
+            label = ttk.Label(self.form_params, font="arial 12", text=columns[i])
+            entry = ttk.Entry(self.form_params, font="arial 12")
 
             self.entries.append(entry)
             self.labels.append(label)
@@ -408,7 +386,7 @@ class App(tk.Tk):
 
     def update_form_open(self, columns):
 
-        def update_form_data(id):
+        def update_form_data(id, tupe_data):
             ## Инициировать форму обновления данных
             print(">>> Update Form - Open")
 
@@ -434,8 +412,11 @@ class App(tk.Tk):
             self.labels = []
 
             for i in range(1, len(columns)):
-                label = ttk.Label(self.form_params, text=columns[i])
-                entry = ttk.Entry(self.form_params)
+                label = ttk.Label(self.form_params, font="arial 12", text=columns[i])
+                entry = ttk.Entry(self.form_params, font="arial 12")
+
+                # отображаем тикущие данные в поле изменения
+                entry.insert(0, tupe_data[i])
 
                 self.entries.append(entry)
                 self.labels.append(label)
@@ -444,11 +425,11 @@ class App(tk.Tk):
                 label.grid(column=i, row=0, pady=1, padx=4)
 
             # создать кнопку отправки
-            self.create_button = Button(self.form_buttons, text="Обновить", width=20, background="green", foreground="white", command=lambda: self.update_row(columns, id))
+            self.create_button = Button(self.form_buttons, text="Обновить", width=20, background="green", foreground="white", font="arial 14", command=lambda: self.update_row(columns, id))
             self.create_button.grid(row=0, column=0, padx=5)
 
             # создать кнопку сброса данных
-            self.reset_button = Button(self.form_buttons, text="Сброс", width=20, background="red", foreground="white", command=self.reset_form)
+            self.reset_button = Button(self.form_buttons, text="Сброс", width=20, background="red", foreground="white", font="arial 14", command=self.reset_form)
             self.reset_button.grid(row=0, column=1, padx=5)
 
         def has_data():
@@ -467,25 +448,31 @@ class App(tk.Tk):
             print(result)
 
             if result != []:
-                update_form_data(find_id)
+                update_form_data(find_id, result[0])
             else:
                 print(">> RES is null")
 
         self.destroy_form()
 
+        # пометка длял текстового поля
+        self.update_find_label = Label(self.form_frame, text=f"Поле: '{columns[0]}'", font="arial 14")
         # Создать поле поиска данных
         self.update_find_entry = Entry(self.form_frame, width=94, font="arial 16")
 
         # Создать кнопку
         self.update_find_btn = Button(self.form_frame, text="Найдти", width=10, background="blue", foreground="white", command=has_data, font="arial 12")
 
-        self.update_find_entry.grid(
+        self.update_find_label.grid(
             row=0,
+            column=1
+        )
+        self.update_find_entry.grid(
+            row=1,
             column=1,
             padx=5
         )
         self.update_find_btn.grid(
-            row=0,
+            row=1,
             column=0
         )
 
@@ -497,21 +484,37 @@ class App(tk.Tk):
         self.destroy_form()
 
         # создаём обёртки
+
+        # пометка для ввода
+        self.delete_elem_label = Label(self.form_frame, text=f"Поле: '{columns[0]}'", font="arial 14")
+
         # поле ввода
         self.delete_elem_entry = Entry(self.form_frame, width=92, font="arial 16")
 
         # кнопка удаления
-        self.delete_elem_btn = Button(self.form_frame, text="Удалить", width=10, background="red", foreground="white", command=lambda: self.delete_row(columns, self.delete_elem_entry.get()), font="arial 12")
+        self.delete_elem_btn = Button(
+            self.form_frame, 
+            text="Удалить", 
+            width=10, 
+            background="red", 
+            foreground="white", 
+            command=lambda: self.delete_row(columns, self.delete_elem_entry.get()), 
+            font="arial 12"
+        )
 
         # инициализация виджетов на удаление
         self.delete_elem_entry.grid(
-            row=0,
+            row=1,
             column=0,
             padx=5
         )
         self.delete_elem_btn.grid(
-            row=0,
+            row=1,
             column=1
+        )
+        self.delete_elem_label.grid(
+            row=0,
+            column=0
         )
 
     def destroy_form(self):
