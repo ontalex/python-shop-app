@@ -39,7 +39,11 @@ def check(event):
         root.destroy()
         app = App()
         app.mainloop()
+    elif result[2] == "Кассир":
         
+        root.destroy()
+        app = App()
+        app.mainloop()
     else:
         messagebox.showerror("Ошибка", "Неправильный логин или пароль", icon="error", type="ok", parent=root)
 
