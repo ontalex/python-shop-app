@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import messagebox
 import pyodbc
 from admin import App
+from cassir import App as appCassir
 
 from lib import *
 
@@ -42,7 +43,7 @@ def check(event):
     elif result[2] == "Кассир":
         
         root.destroy()
-        app = App()
+        app = appCassir(login=login)
         app.mainloop()
     else:
         messagebox.showerror("Ошибка", "Неправильный логин или пароль", icon="error", type="ok", parent=root)
@@ -65,6 +66,48 @@ entry_password = Entry(passForm, width=20, font="Arial 12")
 buttonsForm = Label(root)
 button_signin = Button(buttonsForm, font="Arial 12", width=12, height=2, text='Войти', bg="green", fg="white")
 button_reset = Button(buttonsForm, font="Arial 12", width=12, height=2, text="Сброс")
+
+# Создаём Canvas
+canvas = Canvas(root, width=75, height=32, background="white")
+canvas.place(x=345, y=208)
+
+# Создаём "б"
+canvas.create_line(
+    20, 5,
+    5, 5
+)
+canvas.create_line(
+    5, 5,
+    5, 28
+)
+canvas.create_line(
+    5, 10,
+    20, 19
+)
+canvas.create_line(
+    20, 19,
+    5, 28
+)
+
+# Создаём "А"
+canvas.create_line(
+    30, 28,
+    37, 5
+)
+canvas.create_line(
+    37, 5,
+    45, 29
+)
+canvas.create_line(
+    32, 22,
+    44, 22
+)
+
+# Создаём "О"
+canvas.create_rectangle(
+    55, 5,
+    70, 28
+)
 
 # Добавим привязку событий к кнопкам интерфейса входа
 button_signin.bind("<Button-1>", check)
