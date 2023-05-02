@@ -7,7 +7,6 @@ from tkinter import messagebox
 
 import lib
 
-
 class App(tk.Tk):
     
     def __init__(self):
@@ -56,9 +55,6 @@ class App(tk.Tk):
         self.entries = []
         self.labels = []
 
-
-
-
     def init_menu(self):
         self.main_menu = tk.Menu(self)
         self.config(menu=self.main_menu)
@@ -105,7 +101,6 @@ class App(tk.Tk):
         # Добавляем пункт меню "Управление"
         self.main_menu.add_cascade(label="Управление", menu=self.control_menu)
     
-
     # =============== Оброботчики таблиц ====================
     def update_table(self):
         # Очистить таблицу перед обновлением
@@ -194,7 +189,6 @@ class App(tk.Tk):
         else:
             self.delete_elem_entry.delete(0, END)
 
-
     # ============== инициаторы таблиц ==============
     def products_table(self, create_form = False, edit_form = False, delete_form = False):
         
@@ -221,7 +215,6 @@ class App(tk.Tk):
         else:
             self.destroy_form()
 
-
     def sales_table(self, create_form = False, edit_form = False, delete_form = False):
         print("sales_table")
 
@@ -247,7 +240,6 @@ class App(tk.Tk):
         else:
             self.destroy_form()
 
-
     def suppliers_table(self, create_form = False, edit_form = False, delete_form = False):
         print("suppliers_table")
 
@@ -259,15 +251,6 @@ class App(tk.Tk):
         self.create_table(columns=columns)
 
         self.update_table()
-
-        # # запрос к базе на поучение текущих данных
-        # sql = "SELECT * FROM {}".format(self.table_title)
-        # self.cursor.execute(sql)
-        # result = self.cursor.fetchall()
-
-        # # заполнение таблицы
-        # for row in result:
-        #     self.table.insert(parent='', index='end', values=tuple(row))
 
         # запуск формы для обработки таблицы
         if (create_form == True):
@@ -332,8 +315,6 @@ class App(tk.Tk):
 
         self.destroy_form()
 
-
-
     # =============== Обработчик форм ===============
     def reset_form(self):
         for entry in self.entries:
@@ -357,7 +338,6 @@ class App(tk.Tk):
 
         self.reset_button = Button(self.form_buttons, text="Сброс", width=20, background="red", foreground="white", command=self.reset_form)
         self.reset_button.grid(row=0, column=1, padx=5)
-        
 
         ########################################################################################
 
@@ -371,8 +351,8 @@ class App(tk.Tk):
         self.labels = []
 
         for i in range(0, len(columns)):
-            label = ttk.Label(self.form_params, font="arial 12", text=columns[i])
-            entry = ttk.Entry(self.form_params, font="arial 12")
+            label = ttk.Label(self.form_params, font="arial 10", text=columns[i])
+            entry = ttk.Entry(self.form_params, font="arial 10")
 
             self.entries.append(entry)
             self.labels.append(label)
@@ -412,8 +392,8 @@ class App(tk.Tk):
             self.labels = []
 
             for i in range(1, len(columns)):
-                label = ttk.Label(self.form_params, font="arial 12", text=columns[i])
-                entry = ttk.Entry(self.form_params, font="arial 12")
+                label = ttk.Label(self.form_params, font="arial 10", text=columns[i])
+                entry = ttk.Entry(self.form_params, font="arial 10")
 
                 # отображаем тикущие данные в поле изменения
                 entry.insert(0, tupe_data[i])
@@ -460,7 +440,7 @@ class App(tk.Tk):
         self.update_find_entry = Entry(self.form_frame, width=94, font="arial 16")
 
         # Создать кнопку
-        self.update_find_btn = Button(self.form_frame, text="Найдти", width=10, background="blue", foreground="white", command=has_data, font="arial 12")
+        self.update_find_btn = Button(self.form_frame, text="Найти", width=10, background="blue", foreground="white", command=has_data, font="arial 12")
 
         self.update_find_label.grid(
             row=0,
@@ -534,8 +514,6 @@ class App(tk.Tk):
 
         for widget in self.form_frame.winfo_children():
             widget.destroy()
-
-
 
 if __name__ == "__main__":
     app = App()
