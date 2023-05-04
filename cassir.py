@@ -15,7 +15,7 @@ class App(tk.Tk):
         self.sum = 0
 
         # интициализация подключения
-        self.conn = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Z:\Developments\Python\shop_max\shop\shop1.accdb')
+        self.conn = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Z:\Developments\Python\shop_max\shop_v2\python-shop-app\shop1.accdb')
         self.cursor = self.conn.cursor()
 
         # Базовая разметка
