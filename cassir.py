@@ -12,6 +12,7 @@ class App(tk.Tk):
         # запоминаем логин сессии
         self.login = login
         self.cheque = 1
+        self.sum = 0
 
         # интициализация подключения
         self.conn = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Z:\Developments\Python\shop_max\shop\shop1.accdb')
@@ -91,8 +92,26 @@ class App(tk.Tk):
             self.basket_table.column(column, stretch=tk.YES, anchor=tk.CENTER)
             self.basket_table.heading(column, text=column, anchor=tk.CENTER)
 
+        # создаём виджет формы работы с чеком
+        self.basket_form = Frame(self.basket_wrapper)
+
+        self.basket_sum_label = Label(self.basket_form, font="arial 14", text=f"Сумма: {self.sum}")
+        self.basket_sell_btn = Button(self.basket_form, font="arial 14", text="Продать", command=self.sell_products)
+        self.basket_return_btn = Button(self.basket_form, font="arial 14", text="Вернуть ", command=self.return_product)
+
+        self.basket_form.pack()
+        self.basket_sum_label.pack()
+        self.basket_sell_btn.pack()
+        self.basket_return_btn.pack()
+
         # начальные вызовы
         self.update_product_table()
+
+    def sell_products():
+        print(">> CELL Products")
+
+    def return_product():
+        print(">> Return product")
 
     def update_product_table(self):
         # Очистить таблицу перед обновлением
@@ -130,8 +149,11 @@ class App(tk.Tk):
             db_cost = int(self.get_cost(id_product=code_product))
 
             end_cost = db_cost * user_count
+            self.sum = self.sum + end_cost
 
             print(">> COST data = ", end_cost)
+
+            self.basket_sum_label.configure(text=f"Сумма: {self.sum}")
 
             self.basket_table.insert(parent="" ,index="end", values=(code_product, user_count, end_cost))
 
