@@ -104,6 +104,14 @@ class App(tk.Tk):
         self.basket_sell_btn.pack()
         self.basket_return_btn.pack()
 
+        def on_closing():
+            if messagebox.askokcancel("Quit", "Do you want to quit?"):
+                self.cursor.close()
+                self.conn.close()
+                self.destroy()
+
+        self.protocol("WM_DELETE_WINDOW", on_closing)
+
         # начальные вызовы
         self.update_product_table()
 

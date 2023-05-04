@@ -55,6 +55,14 @@ class App(tk.Tk):
         self.entries = []
         self.labels = []
 
+        def on_closing():
+            if messagebox.askokcancel("Quit", "Do you want to quit?"):
+                self.cursor.close()
+                self.conn.close()
+                self.destroy()
+
+        self.protocol("WM_DELETE_WINDOW", on_closing)
+
     def init_menu(self):
         main_menu = tk.Menu(self)
         self.config(menu=main_menu)

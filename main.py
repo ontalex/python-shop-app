@@ -126,4 +126,12 @@ loginForm.pack()
 passForm.pack()
 buttonsForm.pack(pady=16)
 
+def on_closing():
+    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        cursor.close()
+        conn.close()
+        root.destroy()
+
+root.protocol("WM_DELETE_WINDOW", on_closing)
+
 root.mainloop()
