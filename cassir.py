@@ -175,6 +175,7 @@ class App(tk.Tk):
 
         sql = f"UPDATE Товары SET Количество='{count_product}' WHERE Код='{product_id}'"
         self.cursor.execute(str(sql))
+        self.conn.commit()
 
         self.update_product_table()
 

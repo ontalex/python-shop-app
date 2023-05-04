@@ -175,6 +175,7 @@ class App(tk.Tk):
 
             print(">>> UPDATE SQL STRING = ", sql)
             self.cursor.execute(sql)
+            self.conn.commit()
 
         self.update_table()
         self.update_form_open(columns)
