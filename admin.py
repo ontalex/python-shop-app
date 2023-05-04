@@ -30,8 +30,8 @@ class App(tk.Tk):
         admin_login = self.cursor.fetchone()[0]
 
         # отображение пометки о роли
-        self.rule_label = Label(self, text="Вы вошли как "+str(admin_login), background="#333333", foreground="white", font="9")
-        self.rule_label.pack(side="top", fill="x")
+        rule_label = Label(self, text="Вы вошли как "+str(admin_login), background="#333333", foreground="white", font="9")
+        rule_label.pack(side="top", fill="x")
 
         # создание основного контейнера приложения
         self.app_box = Frame(self,)
@@ -42,8 +42,8 @@ class App(tk.Tk):
         self.form_frame.pack(fill=BOTH, expand=True, padx=16, pady=16)
 
         # пометка для пользователя в контейнере форм
-        self.label_alert = Label(self.form_frame, text="Здесь будет форма данных. \nВыберите таблицу из меню", foreground="red", font="8")
-        self.label_alert.pack(fill=BOTH, expand=1)
+        label_alert = Label(self.form_frame, text="Здесь будет форма данных. \nВыберите таблицу из меню", foreground="red", font="8")
+        label_alert.pack(fill=BOTH, expand=1)
 
         # создание контейнера для таблицы
         self.table = ttk.Treeview(self.app_box)
@@ -56,50 +56,50 @@ class App(tk.Tk):
         self.labels = []
 
     def init_menu(self):
-        self.main_menu = tk.Menu(self)
-        self.config(menu=self.main_menu)
+        main_menu = tk.Menu(self)
+        self.config(menu=main_menu)
             # Создаем меню "Управление"
-        self.control_menu = tk.Menu(self.main_menu)
+        control_menu = tk.Menu(main_menu)
         
         # Добавляем подменю "Товары" и пункты "Добавить", "Просмотреть", "Изменить" и "Удалить"
-        self.products_menu = tk.Menu(self.control_menu)
-        self.products_menu.add_command(label="Добавить", command=lambda: self.products_table(create_form=True))
-        self.products_menu.add_command(label="Просмотреть", command=self.products_table)
-        self.products_menu.add_command(label="Изменить", command=lambda: self.products_table(edit_form=True))
-        self.products_menu.add_command(label="Удалить", command=lambda: self.products_table(delete_form=True))
-        self.control_menu.add_cascade(label="Товары", menu=self.products_menu)
+        products_menu = tk.Menu(control_menu)
+        products_menu.add_command(label="Добавить", command=lambda: self.products_table(create_form=True))
+        products_menu.add_command(label="Просмотреть", command=self.products_table)
+        products_menu.add_command(label="Изменить", command=lambda: self.products_table(edit_form=True))
+        products_menu.add_command(label="Удалить", command=lambda: self.products_table(delete_form=True))
+        control_menu.add_cascade(label="Товары", menu=products_menu)
 
         # Добавляем подменю "Продажи" и пункты "Добавить", "Просмотреть", "Изменить" и "Удалить"
-        self.sales_menu = tk.Menu(self.control_menu)
-        self.sales_menu.add_command(label="Добавить", command=lambda: self.sales_table(create_form=True))
-        self.sales_menu.add_command(label="Просмотреть", command=self.sales_table)
-        self.sales_menu.add_command(label="Изменить", command=lambda: self.sales_table(edit_form=True))
-        self.sales_menu.add_command(label="Удалить", command=lambda: self.sales_table(delete_form=True))
-        self.control_menu.add_cascade(label="Продажи", menu=self.sales_menu)
+        sales_menu = tk.Menu(control_menu)
+        sales_menu.add_command(label="Добавить", command=lambda: self.sales_table(create_form=True))
+        sales_menu.add_command(label="Просмотреть", command=self.sales_table)
+        sales_menu.add_command(label="Изменить", command=lambda: self.sales_table(edit_form=True))
+        sales_menu.add_command(label="Удалить", command=lambda: self.sales_table(delete_form=True))
+        control_menu.add_cascade(label="Продажи", menu=sales_menu)
 
         # Добавляем подменю "Поставщики" и пункты "Добавить", "Просмотреть", "Изменить" и "Удалить"
-        self.suppliers_menu = tk.Menu(self.control_menu)
-        self.suppliers_menu.add_command(label="Добавить", command=lambda: self.suppliers_table(create_form=True))
-        self.suppliers_menu.add_command(label="Просмотреть", command=self.suppliers_table)
-        self.suppliers_menu.add_command(label="Изменить", command=lambda: self.suppliers_table(edit_form=True))
-        self.suppliers_menu.add_command(label="Удалить", command=lambda: self.suppliers_table(delete_form=True))
-        self.control_menu.add_cascade(label="Поставщики", menu=self.suppliers_menu)
+        suppliers_menu = tk.Menu(control_menu)
+        suppliers_menu.add_command(label="Добавить", command=lambda: self.suppliers_table(create_form=True))
+        suppliers_menu.add_command(label="Просмотреть", command=self.suppliers_table)
+        suppliers_menu.add_command(label="Изменить", command=lambda: self.suppliers_table(edit_form=True))
+        suppliers_menu.add_command(label="Удалить", command=lambda: self.suppliers_table(delete_form=True))
+        control_menu.add_cascade(label="Поставщики", menu=suppliers_menu)
 
         # Добавляем подменю "Поставки" и пункты "Добавить", "Просмотреть", "Изменить" и "Удалить"
-        self.supply_menu = tk.Menu(self.control_menu)
-        self.supply_menu.add_command(label="Добавить", command=lambda: self.supply_table(create_form=True))
-        self.supply_menu.add_command(label="Просмотреть", command=self.supply_table)
-        self.supply_menu.add_command(label="Изменить", command=lambda: self.supply_table(edit_form=True))
-        self.supply_menu.add_command(label="Удалить", command=lambda: self.supply_table(delete_form=True))
-        self.control_menu.add_cascade(label="Поставки", menu=self.supply_menu)
+        supply_menu = tk.Menu(control_menu)
+        supply_menu.add_command(label="Добавить", command=lambda: self.supply_table(create_form=True))
+        supply_menu.add_command(label="Просмотреть", command=self.supply_table)
+        supply_menu.add_command(label="Изменить", command=lambda: self.supply_table(edit_form=True))
+        supply_menu.add_command(label="Удалить", command=lambda: self.supply_table(delete_form=True))
+        control_menu.add_cascade(label="Поставки", menu=supply_menu)
 
         # Добавляем подменю "Чеки" и пункты "Добавить", "Просмотреть", "Изменить" и "Удалить"
-        self.check_menu = tk.Menu(self.control_menu)
-        self.check_menu.add_command(label="Просмотреть", command=self.check_table)
-        self.control_menu.add_cascade(label="Чеки", menu=self.check_menu)
+        check_menu = tk.Menu(control_menu)
+        check_menu.add_command(label="Просмотреть", command=self.check_table)
+        control_menu.add_cascade(label="Чеки", menu=check_menu)
 
         # Добавляем пункт меню "Управление"
-        self.main_menu.add_cascade(label="Управление", menu=self.control_menu)
+        main_menu.add_cascade(label="Управление", menu=control_menu)
     
     # =============== Оброботчики таблиц ====================
     def update_table(self):
@@ -278,15 +278,6 @@ class App(tk.Tk):
 
         self.update_table()
 
-        # # запрос к базе на поучение текущих данных
-        # sql = "SELECT * FROM {}".format(self.table_title)
-        # self.cursor.execute(sql)
-        # result = self.cursor.fetchall()
-
-        # # заполнение таблицы
-        # for row in result:
-        #     self.table.insert(parent='', index='end', values=tuple(row))
-
         # запуск формы для обработки таблицы
         if (create_form == True):
             print(">>> Open Create Form")
@@ -418,7 +409,7 @@ class App(tk.Tk):
             # выполнить запрос на поиск данных
             # если есть, то update_form_data, иначе сообщение об ошибки
             
-            find_id = self.update_find_entry.get()
+            find_id = update_find_entry.get()
 
             sql = "SELECT * FROM {} WHERE {}='{}'".format(self.table_title, columns[0], find_id)
             print(">>> SQL STRING = ",sql)
@@ -435,23 +426,23 @@ class App(tk.Tk):
         self.destroy_form()
 
         # пометка длял текстового поля
-        self.update_find_label = Label(self.form_frame, text=f"Поле: '{columns[0]}'", font="arial 14")
+        update_find_label = Label(self.form_frame, text=f"Поле: '{columns[0]}'", font="arial 14")
         # Создать поле поиска данных
-        self.update_find_entry = Entry(self.form_frame, width=94, font="arial 16")
+        update_find_entry = Entry(self.form_frame, width=94, font="arial 16")
 
         # Создать кнопку
-        self.update_find_btn = Button(self.form_frame, text="Найти", width=10, background="blue", foreground="white", command=has_data, font="arial 12")
+        update_find_btn = Button(self.form_frame, text="Найти", width=10, background="blue", foreground="white", command=has_data, font="arial 12")
 
-        self.update_find_label.grid(
+        update_find_label.grid(
             row=0,
             column=1
         )
-        self.update_find_entry.grid(
+        update_find_entry.grid(
             row=1,
             column=1,
             padx=5
         )
-        self.update_find_btn.grid(
+        update_find_btn.grid(
             row=1,
             column=0
         )
@@ -466,13 +457,13 @@ class App(tk.Tk):
         # создаём обёртки
 
         # пометка для ввода
-        self.delete_elem_label = Label(self.form_frame, text=f"Поле: '{columns[0]}'", font="arial 14")
+        delete_elem_label = Label(self.form_frame, text=f"Поле: '{columns[0]}'", font="arial 14")
 
         # поле ввода
         self.delete_elem_entry = Entry(self.form_frame, width=92, font="arial 16")
 
         # кнопка удаления
-        self.delete_elem_btn = Button(
+        delete_elem_btn = Button(
             self.form_frame, 
             text="Удалить", 
             width=10, 
@@ -488,11 +479,11 @@ class App(tk.Tk):
             column=0,
             padx=5
         )
-        self.delete_elem_btn.grid(
+        delete_elem_btn.grid(
             row=1,
             column=1
         )
-        self.delete_elem_label.grid(
+        delete_elem_label.grid(
             row=0,
             column=0
         )
