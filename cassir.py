@@ -103,23 +103,19 @@ class App(tk.Tk):
         self.basket_sum_label.pack()
         self.basket_sell_btn.pack()
         self.basket_return_btn.pack()
-
-        def on_closing():
-            if messagebox.askokcancel("Quit", "Do you want to quit?"):
-                self.cursor.close()
-                self.conn.close()
-                self.destroy()
-
-        self.protocol("WM_DELETE_WINDOW", on_closing)
-
+        
         # начальные вызовы
         self.update_product_table()
+
+        # self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def sell_products():
         print(">> CELL Products")
 
+
     def return_product():
         print(">> Return product")
+        
 
     def update_product_table(self):
         # Очистить таблицу перед обновлением
@@ -203,8 +199,13 @@ class App(tk.Tk):
         res = int(self.cursor.fetchone()[0])
         print(">> GET cost = ", res)
 
-
         return res
+
+    # def on_closing():
+    #     if messagebox.askokcancel("Quit", "Do you want to quit?"):
+    #         self.cursor.close()
+    #         self.conn.close()
+    #         self.destroy()
 
 if __name__ == "__main__":
     app = App()
