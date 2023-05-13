@@ -4,6 +4,7 @@ from tkinter import messagebox
 import pyodbc
 from admin import App
 from cassir import App as appCassir
+from clientV2 import App as appClient
 
 from lib import *
 
@@ -36,14 +37,16 @@ def check(event):
     if result is None:
         messagebox.showerror("Ошибка", "Неправильный логин или пароль", icon="error", type="ok", parent=root)
     elif result[2] == "Администратор":
-        
         root.destroy()
         app = App()
         app.mainloop()
     elif result[2] == "Кассир":
-        
         root.destroy()
         app = appCassir(login=login)
+        app.mainloop()
+    elif result[2] == "Клиент":
+        root.destroy()  
+        app = appClient(login=login)
         app.mainloop()
     else:
         messagebox.showerror("Ошибка", "Неправильный логин или пароль", icon="error", type="ok", parent=root)

@@ -2,7 +2,6 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 
-import time
 import pyodbc
 from tkinter import messagebox
 
@@ -12,7 +11,6 @@ class App(tk.Tk):
 
         # запоминаем логин сессии
         self.login = login
-        self.cheque = 1
         self.sum = 0
 
         # интициализация подключения
@@ -79,7 +77,7 @@ class App(tk.Tk):
 
 
         # создаём виджет таблицы корзины
-        Label(self.basket_wrapper, text=f"Чек №{self.cheque}", font="arial 14").pack(fill="x", pady=[0, 8])
+        Label(self.basket_wrapper, text=f"Чек", font="arial 14").pack(fill="x", pady=[0, 8])
 
         self.basket_columns = ("Код", "Количество", "Цена")
         self.basket_table = ttk.Treeview(self.basket_wrapper)
@@ -97,7 +95,7 @@ class App(tk.Tk):
         self.basket_form = Frame(self.basket_wrapper)
 
         self.basket_sum_label = Label(self.basket_form, font="arial 14", text=f"Сумма: {self.sum}")
-        self.basket_sell_btn = Button(self.basket_form, font="arial 14", text="Продать", command=self.sell_products)
+        self.basket_sell_btn = Button(self.basket_form, font="arial 14", text="Купить", command=self.buy_products)
         self.basket_return_btn = Button(self.basket_form, font="arial 14", text="Вернуть ", command=self.return_product)
 
         self.basket_form.pack()
@@ -110,16 +108,42 @@ class App(tk.Tk):
 
         # self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
-    def sell_products(self):
-        print(">> CELL Products")
+    def check_admin(self):
+        print(">> Check admin accept")
+
+        # интициализация подключения
+        connCheck = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=Z:\Developments\Python\shop_max\shop_v2\python-shop-app\shop1.accdb')
+        cursorCheck = connCheck.cursor()
+
+        winCheck = Tk()
+        
+        Label(winCheck, text="Логин")
+        login = Entry(winCheck)
+
+        Label(winCheck, text="Пароль")
+        password = Entry(winCheck)
+
+        cursorCheck.execute(f"SELECT * FROM Пользователи WHERE Логин = '{login.get()}' AND Пароль = '{password.get()}' WHERE Роль = 'Администратор'")
+        resultCheck = cursorCheck.fetchone()
+
+        if resultCheck != ():
+            connCheck.close()
+            return True
+        else:
+            return False
+
+    def buy_products(self):
+        print(">> BUY Products")
         # Check if there are any products in the basket
-        if self.basket_table.get_children():
+        if self.basket_table.get_children() and self.check_admin():
         # Iterate through the products in the basket
             for item in self.basket_table.get_children():
                 # Check if there is enough stock to sell
                 print(item," => ",item)
                 self.basket_table.delete(item)
                 self.sum = 0
+
+            
 
             # Show success message to the user
             messagebox.showinfo(title="Успех!", message="Товары успешно проданы!")
@@ -167,7 +191,6 @@ class App(tk.Tk):
             # Show message to user about error
             messagebox.showerror("Ошибка возврата", f"Произошла ошибка при возврате товаров: {str(e)}")
     
-
     def update_product_table(self):
         # Очистить таблицу перед обновлением
         records = self.product_table.get_children()
@@ -251,12 +274,6 @@ class App(tk.Tk):
         print(">> GET cost = ", res)
 
         return res
-
-    # def on_closing():
-    #     if messagebox.askokcancel("Quit", "Do you want to quit?"):
-    #         self.cursor.close()
-    #         self.conn.close()
-    #         self.destroy()
 
 if __name__ == "__main__":
     app = App()

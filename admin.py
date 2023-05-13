@@ -153,9 +153,10 @@ class App(tk.Tk):
         for entry in self.entries:
             values.append(entry.get())
             entry.delete(0, tk.END) # очистить поле ввода после добавления записи
-        sql = "INSERT INTO {} VALUES ({});".format(self.table_title, ",".join(["'{}'".format(value) for value in values]))
+        sql = "INSERT INTO {} VALUES ({})".format(self.table_title, ",".join(["'{}'".format(value) for value in values]))
         self.cursor.execute(sql)
         self.conn.commit()
+        
         self.update_table()
 
     def update_row(self, columns, id_find):
